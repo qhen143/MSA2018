@@ -1,3 +1,4 @@
+import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import * as React from "react";
 
@@ -43,6 +44,7 @@ export default class FirstComponent extends React.Component<{}, IState> {
                 const param = "fsym="+ this.state.name + "&tsyms=" + this.state.currency + "&extraParams=nzmsa2018qhen143"
                 const url = root + path + param 
                 fetch(url)
+                // https://min-api.cryptocompare.com/data/all/coinlist // for later
                 // fetch("https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD,JPY&extraParams=nzmsa2018qhen143")
                         .then(res => res.json())
                         .then(
@@ -76,26 +78,39 @@ export default class FirstComponent extends React.Component<{}, IState> {
         }
 
         public render() {
+                
                  return (
-                        <form onSubmit={this.handleSubmit}>
-
-                                 <TextField
-                                        id="name"
-                                        label="Name"
-                                        value={this.state.name}
-                                        onChange={this.handleNameChange}
-                                        margin="normal"
-                                        />
-                                <TextField
-                                        id="currency"
-                                        label="Currency"
-                                        value={this.state.currency}
-                                        onChange={this.handleCurrencyChange}
-                                        margin="normal"
-                                        />
-                                <input type="submit" value="Submit" />
-                                <label > {this.state.value} </label>
-                        </form>
+                        <div className = 'outer' >
+                                <div className="containers">
+                                                <div className = 'components'>
+                                                        <TextField
+                                                                id="name"
+                                                                label="Name"
+                                                                value={this.state.name}
+                                                                onChange={this.handleNameChange}
+                                                                margin="normal"
+                                                                className = 'inputs'
+                                                                />
+                                                        <TextField
+                                                                id="currency"
+                                                                label="Currency"
+                                                                value={this.state.currency}
+                                                                onChange={this.handleCurrencyChange}
+                                                                margin="normal"
+                                                                className = 'inputs'
+                                                                style = {{margin: 20}}
+                                                                />
+                                                <Button variant="contained" 
+                                                color="primary" 
+                                                onClick = {this.handleSubmit}
+                                                style = {{width: 150}}
+                                                >
+                                                        Get Price
+                                                 </Button>
+                                                 </div>
+                                                <label > {this.state.value} </label>
+                                </div>
+                         </div>
                 );
         }
 }
