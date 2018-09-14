@@ -6,8 +6,14 @@ export default class App extends React.Component<{}> {
     return (
       <div className="container-fluid">
       <div className="centreText">
-        {/* React components must have a wrapper node/element */}
-        <h1>( ͡° ͜ʖ ͡°)</h1>
+        <div className = 'outer' >
+          <div className="containers">
+            <h1>(◕‿◕✿)</h1>
+            <h2> Welcome to CryptoChecc! </h2>
+            <p> This site lets you check the current price of cryptocurrency in any currency.</p>
+            <p> Thanks to https://min-api.cryptocompare.com/ for providing free access to their API for this demo. </p>
+          </div>
+          </div>
       </div>
     </div>
     );

@@ -7,25 +7,35 @@ interface IState {
         error: any,
         isLoaded: boolean,
         items: object,
+        message: any
         name: any,
         value: any
+        
+}
+
+const styles = {
+        textField: {
+        margin: 20,
+     }
 }
 
 export default class FirstComponent extends React.Component<{}, IState> {
         constructor(props: any) {
                 super(props);
                 this.state = {
-                        currency: '',
+                        currency: 'NZD',
                         error: null,
                         isLoaded: false,
                         items: {},
-                        name: '',
+                        message: 'Enter a CryptoCoin to find its current value.',
+                        name: 'BTC',
                         value: ''
                 };
             
                 this.handleNameChange = this.handleNameChange.bind(this);
                 this.handleCurrencyChange = this.handleCurrencyChange.bind(this);
                 this.handleSubmit = this.handleSubmit.bind(this);
+                this.displayData = this.displayData.bind(this);
         }
             
         public handleNameChange(event: any) {
@@ -36,49 +46,51 @@ export default class FirstComponent extends React.Component<{}, IState> {
                 this.setState({currency: event.target.value.toUpperCase()});
         }
         
-        public handleSubmit(event: any) {
-                alert('A name was submitted: ' + this.state.name);
-                
+        public handleSubmit(event: any) {  
+                // Forming an URL to the API with user input parameters
                 const root = "https://min-api.cryptocompare.com/"
                 const path = "data/price?"
                 const param = "fsym="+ this.state.name + "&tsyms=" + this.state.currency + "&extraParams=nzmsa2018qhen143"
                 const url = root + path + param 
+
+                // API call
                 fetch(url)
-                // https://min-api.cryptocompare.com/data/all/coinlist // for later
-                // fetch("https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD,JPY&extraParams=nzmsa2018qhen143")
                         .then(res => res.json())
                         .then(
                                 (res) => {
+                                        // Store retrieved data and alter the display
                                         this.setState({
                                                 isLoaded: true,
                                                 items: res
-                                        });
-                                         // tslint:disable-next-line:no-console
-                                         console.log(this.state.items)   
+                                        });  
                                          this.displayData();
                                 },
-                                // Note: it's important to handle errors here
-                                // instead of a catch() block so that we don't swallow
-                                // exceptions from actual bugs in components.
+                                // Invalid response (error handling)
                                 (error) => {
                                         this.setState({
                                                 error,
                                                 isLoaded: true
                                                 
                                          });
-                                         // tslint:disable-next-line:no-console
-                                        console.log("asas")  
                                 }
                         )
                 event.preventDefault();
         }
         
+        // Updates components with new data
         public displayData() {
                 this.setState({value: this.state.items[this.state.currency]});
+                const response = 'Response'
+                if (this.state.items[response] === "Error") {
+                        this.setState({message: 'Invalid search parameters!'})      
+                } else {
+
+                        this.setState({message: '1 '+ this.state.name + ' is worth $' + this.state.value})
+                        
+                }
         }
 
         public render() {
-                
                  return (
                         <div className = 'outer' >
                                 <div className="containers">
@@ -90,7 +102,7 @@ export default class FirstComponent extends React.Component<{}, IState> {
                                                                 onChange={this.handleNameChange}
                                                                 margin="normal"
                                                                 className = 'inputs'
-                                                                />
+                                                        />
                                                         <TextField
                                                                 id="currency"
                                                                 label="Currency"
@@ -98,17 +110,15 @@ export default class FirstComponent extends React.Component<{}, IState> {
                                                                 onChange={this.handleCurrencyChange}
                                                                 margin="normal"
                                                                 className = 'inputs'
-                                                                style = {{margin: 20}}
-                                                                />
-                                                <Button variant="contained" 
-                                                color="primary" 
-                                                onClick = {this.handleSubmit}
-                                                style = {{width: 150}}
-                                                >
-                                                        Get Price
-                                                 </Button>
-                                                 </div>
-                                                <label > {this.state.value} </label>
+                                                                style = {styles.textField}
+                                                        />
+                                                        <Button variant="contained" 
+                                                                color="primary" 
+                                                                onClick = {this.handleSubmit}
+                                                                style = {{width: 150}}
+                                                        >Get Price</Button>
+                                                </div>
+                                                <label > {this.state.message} </label>
                                 </div>
                          </div>
                 );
