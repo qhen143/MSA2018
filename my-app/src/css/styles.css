@@ -32,8 +32,12 @@
   }
 
 h1 {
-    font-size: 100px;
+    font-size: 5vw;
 }
 h2 {
-    font-size: 50px;
+    font-size: 2vw;
+}
+
+p {
+    font-size: 1vw;
 }
